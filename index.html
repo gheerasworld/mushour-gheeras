@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>خميسات موشور | لعبة أبجد هوز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rose:#CE3636; --gold:#E5AF2F; --plum:#592255; --lav:#BD9FFF; --butter:#EFE0B6; --coal:#121214;
+  --panel:#F6EBCB; --card:#FBF4DF; --ink:#2A1428; --ink2:#5E4560; --line:#DCC893;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --panel:#241229; --card:#331A39; --ink:#F6EBCB; --ink2:#CDB9C9; --line:#5A2D60;
+  }
+}
+:root[data-theme="dark"]{
+  --panel:#241229; --card:#331A39; --ink:#F6EBCB; --ink2:#CDB9C9; --line:#5A2D60;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; min-height:100%;
+  font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
+  font-size:20px; line-height:1.8; color:var(--ink);
+  background-color:var(--rose);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Crect width='28' height='28' fill='%23CE3636'/%3E%3Cpath d='M14 3 25 14 14 25 3 14Z' fill='none' stroke='%23EFE0B6' stroke-width='2'/%3E%3Ccircle cx='14' cy='14' r='3' fill='%23E5AF2F'/%3E%3C/svg%3E");
+}
+.stage{min-height:100vh;padding:16px 12px;display:flex;justify-content:center;align-items:flex-start}
+@media (min-width:760px){.stage{padding:30px 24px}}
+.panel{
+  width:100%; max-width:900px; background:var(--panel);
+  border:3px solid var(--gold); border-radius:22px;
+  box-shadow:0 0 0 6px var(--butter), 0 0 0 9px var(--gold);
+  padding:22px 16px 28px; margin:9px 0;
+}
+@media (min-width:760px){.panel{padding:34px 40px 40px}}
+.panel:focus{outline:none}
+h1,h2,h3,p{margin:0}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- الشاشة الأولى ---------- */
+.hearts{display:flex;justify-content:center;gap:10px;margin-bottom:18px}
+.hearts svg{width:30px;height:30px;fill:var(--gold)}
+.hero{
+  background:var(--plum); color:var(--butter);
+  border:4px solid var(--gold); border-radius:999px 999px 22px 22px;
+  max-width:520px; margin:0 auto; padding:44px 22px 30px; text-align:center;
+}
+.hero svg.prism{width:100%;max-width:330px;height:auto;display:block;margin:0 auto 6px}
+.ray{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s .35s ease-out forwards}
+.ray:nth-of-type(2){animation-delay:.5s}.ray:nth-of-type(3){animation-delay:.65s}.ray:nth-of-type(4){animation-delay:.8s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.hero h1{font-size:2.9rem;line-height:1.3;font-weight:700;color:var(--butter)}
+.hero .sub{display:inline-block;margin-top:8px;padding:2px 20px;border-radius:99px;background:var(--lav);color:var(--coal);font-size:1.35rem;font-weight:700}
+.intro{max-width:560px;margin:24px auto 0;text-align:center;color:var(--ink2)}
+.namebox{max-width:380px;margin:22px auto 0;display:block}
+.namebox label{display:block;font-weight:700;margin-bottom:4px}
+.namebox input{
+  width:100%;font:inherit;font-size:1.2rem;padding:10px 14px;border-radius:12px;
+  border:2px solid var(--line);background:var(--card);color:var(--ink);
+}
+.actions{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:22px}
+.btn{
+  font-size:1.3rem;font-weight:700;border:0;border-radius:14px;padding:12px 34px;cursor:pointer;
+  background:var(--rose);color:#FFF6DF;min-width:230px;transition:transform .12s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink);font-size:1.1rem;padding:8px 24px}
+.best{text-align:center;margin-top:14px;color:var(--ink2);font-size:1rem}
+.foot{text-align:center;margin-top:26px;font-size:.95rem;color:var(--ink2)}
+
+/* ---------- شاشة السؤال ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.pill{background:var(--card);border:2px solid var(--line);border-radius:99px;padding:0 16px;font-weight:700;font-size:1.05rem}
+.pill.score{background:var(--plum);border-color:var(--plum);color:var(--butter)}
+.beam{height:14px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:16px}
+.beam i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:right center;transition:background .3s}
+.beam i.low{background:var(--rose)}
+.chip{display:inline-block;font-size:.95rem;font-weight:700;padding:0 14px;border-radius:99px;margin-bottom:6px}
+.chip.v{background:var(--plum);color:var(--butter)}
+.chip.f{background:var(--lav);color:var(--coal)}
+.chip.l{background:var(--gold);color:var(--coal)}
+.qtext{font-size:1.7rem;line-height:1.7;font-weight:700;margin-bottom:18px}
+@media (min-width:760px){.qtext{font-size:2rem}}
+.tiles{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:700px){.tiles{grid-template-columns:1fr 1fr}}
+.tile{
+  position:relative;display:flex;align-items:center;gap:14px;border:0;border-radius:16px;
+  padding:14px 18px;min-height:78px;font-size:1.3rem;font-weight:700;line-height:1.5;text-align:right;cursor:pointer;
+  background:var(--tb);color:var(--tc);transition:transform .12s,opacity .2s;
+}
+.tile:hover:not(:disabled){transform:translateY(-2px)}
+.tile svg{width:30px;height:30px;flex:none;fill:currentColor}
+.tile[data-k="0"]{--tb:var(--rose);--tc:#FFF6DF}
+.tile[data-k="1"]{--tb:var(--gold);--tc:var(--coal)}
+.tile[data-k="2"]{--tb:var(--plum);--tc:var(--butter)}
+.tile[data-k="3"]{--tb:var(--lav);--tc:var(--coal)}
+.tile:disabled{cursor:default}
+.tile.dim{opacity:.35}
+.tile.right{outline:5px solid var(--ink);outline-offset:3px}
+.tile .mark{margin-inline-start:auto;font-size:1.8rem}
+.keys{margin-top:12px;text-align:center;font-size:.9rem;color:var(--ink2)}
+
+/* ---------- شاشة النتيجة ---------- */
+.fb{border-radius:22px;padding:26px 20px;text-align:center;margin-bottom:16px}
+.fb.ok{background:var(--gold);color:var(--coal)}
+.fb.no{background:var(--lav);color:var(--coal)}
+.fb .big{font-size:2.4rem;font-weight:700;line-height:1.4}
+.fb .pts{font-size:1.5rem;font-weight:700}
+.fb .mini{font-size:1.05rem}
+.fb .glyph{width:58px;height:58px;margin:0 auto 4px;display:block;animation:pop .45s ease-out}
+@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.note{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:14px 18px;margin-bottom:18px}
+.note h3{font-size:1.15rem;color:var(--rose);margin-bottom:2px}
+.note p{line-height:1.95}
+.rightans{margin-bottom:10px;font-weight:700}
+
+/* ---------- الختام ---------- */
+.endhero{background:var(--plum);color:var(--butter);border:4px solid var(--gold);border-radius:999px 999px 22px 22px;max-width:520px;margin:0 auto;padding:44px 22px 28px;text-align:center}
+.endhero .score{font-size:3.2rem;font-weight:700;line-height:1.3;color:var(--gold)}
+.endhero .badge{font-size:2rem;font-weight:700}
+.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:20px 0}
+.stat{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:6px 20px;text-align:center;min-width:130px}
+.stat b{display:block;font-size:1.7rem}
+.challenge{max-width:600px;margin:0 auto;background:var(--card);border:2px dashed var(--rose);border-radius:16px;padding:14px 20px;text-align:center}
+.challenge h3{color:var(--rose);font-size:1.2rem}
+
+/* ---------- وضع العرض ---------- */
+.pres .qtext{font-size:2.1rem}
+@media (min-width:760px){.pres .qtext{font-size:2.7rem}.pres .tile{font-size:1.8rem;min-height:120px}}
+.pbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+
+@media (prefers-reduced-motion:reduce){
+  .ray{animation:none;stroke-dashoffset:0}
+  .fb .glyph{animation:none}
+  .btn,.tile{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="stage"><main class="panel" id="app" tabindex="-1"></main></div>
+
+<script>
+(function(){
+"use strict";
+
+var T = 20; // ثواني السؤال
+var ICONS = [
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 20H2Z"/></svg>',
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C5 15.5 2 12 2 8.5A5 5 0 0 1 12 6a5 5 0 0 1 10 2.5C22 12 19 15.5 12 21Z"/></svg>',
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>',
+  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6Z"/></svg>'
+];
+var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21C5 15.5 2 12 2 8.5A5 5 0 0 1 12 6a5 5 0 0 1 10 2.5C22 12 19 15.5 12 21Z"/></svg>';
+
+/* t: v = من المحتوى ، f = فاصل طريف */
+var Q = [
+ {t:"v", q:"من أين يبدأ البر بالوالدين، كما في الفكرة المركزية للقاء الأول؟",
+  o:["من يدي حين أخدمهما","من قلبي حين أعظّم أمر ربي","من كلام الناس عن البارّات","من الهدية الغالية في المناسبات"], a:1,
+  n:"البر لا يبدأ من يدي حين أخدمهما، بل من قلبي حين أعظّم أمر ربي. وحين يكون الدافع هو الله، يستمر البر حتى لو لم أكن راغبة، وحتى لو لم يرني أحد."},
+ {t:"f", q:"للأخطبوط قلوب أكثر من قلبك. كم قلبًا عنده؟",
+  o:["قلب واحد","قلبان","ثلاثة قلوب","ثمانية قلوب"], a:2,
+  n:"ثلاثة قلوب! ومع ذلك فقلبك الواحد يتسع لأمك وأبيك وكل من تحبين."},
+ {t:"v", q:"أكملي: «وقضى ربك ألا تعبدوا إلا إياه و… إحسانًا»",
+  o:["بالوالدين","بالأقربين","بالجار","باليتامى"], a:0,
+  n:"جاء الإحسان إلى الوالدين مقرونًا بعبادة الله وحده، وهذا موقع البر في منظومة العبودية."},
+ {t:"f", q:"قالت أمك: «تعالي شوي». كلمة «شوي» عند الأمهات غالبًا تعني…",
+  o:["ثانية وحدة وترجعين","شغلة صغيرة وراها ثلاث شغلات","نتفرج على شي ونرتاح","نسولف عشر دقايق بس"], a:1,
+  n:"وتروحين لها بوجه مبتسم؛ لأن وراء كل نداء أمرًا من الله: «وبالوالدين إحسانًا»."},
+ {t:"v", q:"أي نبيّين ذكرت سورة مريم برّهما بوالديهما؟",
+  o:["يحيى وعيسى عليهما السلام","يوسف ويعقوب عليهما السلام","موسى وهارون عليهما السلام","نوح وهود عليهما السلام"], a:0,
+  n:"«وبرًّا بوالديه» في يحيى، و«وبرًّا بوالدتي» في عيسى؛ فالبر من صفات الأنبياء."},
+ {t:"f", q:"الموشور يحلل الضوء الأبيض إلى ألوان الطيف. كم لونًا نعدّها عادةً؟",
+  o:["ثلاثة","خمسة","سبعة","اثنا عشر"], a:2,
+  n:"سبعة ألوان. وهذا سر اسم «موشور»: ضوء واحد يخرج منه ألوان كثيرة، كما يخرج أجمل ما فيك حين تتلقين الضوء من والديك."},
+ {t:"v", q:"فتاة اشترت لأمها هدية غالية، لكنها تريد أن تصوّرها وتنشرها. كيف نصنّف الموقف؟",
+  o:["بر كامل","ليس برًا","يحتاج تصحيح النية","يحتاج تصوير أفضل"], a:2,
+  n:"البر ليس مجرد «ماذا فعلتِ؟» بل «لماذا فعلتِ؟ وكيف فعلتِ؟». الهدية جميلة، والنية تحتاج أن تكون لله ولأمك."},
+ {t:"f", q:"سألتك أمك: «وش تبين للعشاء؟» فقلتِ: «أي شيء». ردّها الأرجح؟",
+  o:["تمام يا قلبي، بسوي لك أي شيء","وش هو «أي شيء» هذا؟ أول مرة أسمع بهذا الطبق!","طيب وأنا بعد أي شيء","خلاص، كل وحدة تتعشى اللي تلقاه في الثلاجة"], a:1,
+  n:"اقتراح واحد منك يخفف عنها عبء القرار اليومي، وهذا من البر الصغير الذي يفرحها."},
+ {t:"v", q:"رجل حمل أمه على ظهره وهو يطوف بالبيت، ثم سأل ابن عمر رضي الله عنهما: «أتراني جزيتها؟». بماذا أجابه؟",
+  o:["نعم، وزدتَ عليها","لا، ولا بزفرة واحدة","تقريبًا، أو ما يقارب","الأمر عند الله وحده"], a:1,
+  n:"«لا، ولا بزفرة واحدة». فالبادئ بالبر لا يُكافأ؛ لأن إحسانهما إليك كان على سبيل الابتداء."},
+ {t:"f", q:"أي هذه الحيوانات ينام وهو واقف على قوائمه؟",
+  o:["القطة","الحصان","الدب","الأرنب"], a:1,
+  n:"الحصان ينام واقفًا. أما أنتِ فسريرك المريح أفضل!"},
+ {t:"v", q:"في آية الأحقاف: «حملته أمه كرهًا ووضعته كرهًا وحمله وفصاله …». كم المدة المذكورة؟",
+  o:["ثلاثة أشهر","ثلاثون شهرًا","ثلاثون سنة","ثلاثة وثلاثون شهرًا"], a:1,
+  n:"ثلاثون شهرًا من التعب والرعاية. وهذه بداية «حكاية فضل لا تنتهي» التي نتحدث عنها في اللقاء الثاني."},
+ {t:"f", q:"وصلتك رسالة من أبيك: «اتصلي عليّ». أول ما يخطر في بالك؟",
+  o:["أكيد يبي يسلم عليّ","وش سويت؟!","أكيد جوعان","اشتاق لي وبس"], a:1,
+  n:"غالبًا يريد أن يسمع صوتك فقط. ومن البر أن تتصلي بسرعة وبصوت يفرحه."},
+ {t:"v", q:"في الحديث الصحيح عن أحق الناس بحسن الصحبة، كم مرة قيل «أمك» قبل أن يُذكر الأب؟",
+  o:["مرة واحدة","مرتين","ثلاث مرات","أربع مرات"], a:2,
+  n:"«أمك، ثم أمك، ثم أمك، ثم أبوك». ومن هنا نفهم دلالة الوصية بالأم أولًا ثم الأب."},
+ {t:"f", q:"أي هذه الأطعمة لا يكاد يفسد مهما طال الزمن إذا حُفظ جيدًا؟",
+  o:["الحليب","العسل","الخبز","الفراولة"], a:1,
+  n:"العسل! وحلاوة البر مثله: تبقى وتدوم."},
+ {t:"v", q:"اشتهر هذا التابعي ببره بأمه، وتُروى قصته ضمن ثمرات البر. من هو؟",
+  o:["أويس القرني","سعيد بن جبير","الحسن البصري","عروة بن الزبير"], a:0,
+  n:"أويس القرني رحمه الله، وقصته من قصص ثمرات البر في اللقاء الثاني."},
+ {t:"f", q:"أبوك يشرح لك معلومة وأنتِ تعرفينها منذ سنة. التصرف الأذكى؟",
+  o:["أقاطعه: أعرف أعرف!","أسمع وأبتسم وأقول: ما شاء الله، شكرًا يا بابا","أطلع الجوال وأتظاهر بالانشغال","أقول: هذا قديم يا بابا"], a:1,
+  n:"إنصاتك له أحيانًا هدية أغلى من المعلومة نفسها، والبر يحب الأدب في الرد."},
+ {t:"v", q:"أكملي الدعاء: «وقل رب ارحمهما كما … صغيرًا»",
+  o:["ربياني","أطعماني","حملاني","أحبّاني"], a:0,
+  n:"خُصّت التربية بالذكر ليتذكر العبد شفقة الوالدين وتعبهما، فيزداد حنانًا عليهما. وهذه هي «نظارة رب ارحمهما» في اللقاء الثالث."},
+ {t:"f", q:"رقبة الزرافة الطويلة فيها كم فقرة؟",
+  o:["٧ فقرات","١٤ فقرة","٢٠ فقرة","٣٠ فقرة"], a:0,
+  n:"سبع فقرات فقط، مثل رقبتك تمامًا! لكن كل فقرة عندها أطول بكثير."},
+ {t:"v", q:"أمك رجعت من يوم طويل وقالت: «ما فيني حيل»، وأنتِ تبين تسألينها عن شيء غير مستعجل. التصرف الأذكى؟",
+  o:["أسألها فورًا قبل ما أنسى","أحضر لها ماء أو شايًا وأتركها ترتاح، وأسأل لاحقًا","أقول لها: وأنا تعبانة بعد","أنظر إليها نظرة عتب"], a:1,
+  n:"الوالدان بشر؛ لهما مشاعر وضغوط. ومن يفهم تعب أمه يسبق طلبها بمبادرة صغيرة."},
+ {t:"f", q:"أمك جرّبت وصفة جديدة والنتيجة… غريبة شوي. أنسب تعليق؟",
+  o:["وش هذا؟!","تسلم يدك يا ماما! وجرّبي المرة الجاية نزيد لمسة صغيرة ونحبها أكثر","أنا شبعانة من برا","نرسله للجيران"], a:1,
+  n:"الصدق مع اللطف: كلمة طيبة تسبق الملاحظة. «وقل لهما قولًا كريمًا»."}
+];
+
+var RID = [
+ {t:"l", q:"لغز: ما الشيء الذي كلما أخذتِ منه كبر؟",
+  o:["الحفرة","الكرة","الجبل","البالون"], a:0,
+  n:"الحفرة! كلما أخرجتِ منها تراب زادت اتساعًا."},
+ {t:"l", q:"لغز: له عين ولا يرى. ما هو؟",
+  o:["الكوب","الإبرة","الشباك","الكتاب"], a:1,
+  n:"الإبرة، لها «عين» وهي ثقبها الصغير."},
+ {t:"l", q:"لغز: يستمر حتى لو لم أكن راغبة، وحتى لو لم يرني أحد، ولا يرتبط بمزاجي. ما هو؟",
+  o:["الحماس","البر","الموضة","الحظ"], a:1,
+  n:"البر الصادق: حين يكون دافعه الله لا مزاجي ولا نظرة الناس، فإنه يستمر في كل حال."},
+ {t:"l", q:"لغز: ما هو البيت الذي ليس له أبواب ولا نوافذ؟",
+  o:["الخيمة","الصندوق","البيضة","الغيمة"], a:2,
+  n:"البيضة! بيت مغلق من كل جهة وفيه كتكوت صغير."}
+];
+[4,13,18,22].forEach(function(pos,i){ Q.splice(pos,0,RID[i]); });
+
+var BADGES = [
+ {min:0.9, name:"موشور متألّق", msg:"ضوؤك وصل كل الألوان! أنتِ جاهزة تنقلين البر من المعرفة إلى الممارسة."},
+ {min:0.7, name:"ضوء ساطع", msg:"إجاباتك تشع. بقي القليل لتصير القيمة سلوكًا كل يوم."},
+ {min:0.45, name:"شعاع واعد", msg:"بداية جميلة. كل لقاء جديد يضيف لونًا جديدًا إلى طيفك."},
+ {min:0,  name:"بداية الطيف", msg:"ما يهم أنك بدأتِ. أعيدي اللعب وشوفي كم لونًا تكتشفين."}
+];
+
+var app = document.getElementById("app");
+var D = "٠١٢٣٤٥٦٧٨٩";
+function chipLabel(t){ return t==="v" ? "من لقاءاتنا" : (t==="l" ? "لغز" : "فاصل طريف"); }
+function ar(n){ return String(n).replace(/\d/g,function(d){return D[d];}); }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+/* حالة اللعب */
+var S = {};
+var timer = null;
+
+function stopTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+function render(html, pres){
+  stopTimer();
+  app.className = "panel" + (pres ? " pres" : "");
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+  app.focus();
+}
+function getBest(){ try{ return parseInt(localStorage.getItem("mushour_best")||"0",10)||0; }catch(e){ return 0; } }
+function setBest(v){ try{ localStorage.setItem("mushour_best", String(v)); }catch(e){} }
+function getName(){ try{ return localStorage.getItem("mushour_name")||""; }catch(e){ return ""; } }
+function setName(v){ try{ localStorage.setItem("mushour_name", v); }catch(e){} }
+
+/* ---------- الشاشة الأولى ---------- */
+function showStart(){
+  var best = getBest();
+  var hearts = "";
+  for(var i=0;i<5;i++) hearts += HEART;
+  render(
+   '<div class="hearts" aria-hidden="true">'+hearts+'</div>'+
+   '<section class="hero">'+
+     '<svg class="prism" viewBox="0 0 320 170" role="img" aria-label="ضوء يمر في موشور فيتحول إلى ألوان">'+
+       '<polygon points="150,22 92,138 208,138" fill="#BD9FFF" stroke="#E5AF2F" stroke-width="4" stroke-linejoin="round"/>'+
+       '<line x1="320" y1="88" x2="180" y2="88" stroke="#EFE0B6" stroke-width="6" stroke-linecap="round"/>'+
+       '<path class="ray" pathLength="1" d="M122 88 L8 28" stroke="#CE3636" stroke-width="7" stroke-linecap="round" fill="none"/>'+
+       '<path class="ray" pathLength="1" d="M122 88 L4 66" stroke="#E5AF2F" stroke-width="7" stroke-linecap="round" fill="none"/>'+
+       '<path class="ray" pathLength="1" d="M122 88 L4 108" stroke="#EFE0B6" stroke-width="7" stroke-linecap="round" fill="none"/>'+
+       '<path class="ray" pathLength="1" d="M122 88 L8 148" stroke="#BD9FFF" stroke-width="7" stroke-linecap="round" fill="none"/>'+
+     '</svg>'+
+     '<h1>خميسات موشور</h1>'+
+     '<span class="sub">أبجد هوز</span>'+
+   '</section>'+
+   '<p class="intro">'+ar(Q.length)+' سؤالًا وألغازًا عن بر الوالدين: بعضها من لقاءاتنا، وبعضها لتروّحي عن نفسك وتبتهجي. كلما أجبتِ أسرع زادت نقاطك.</p>'+
+   '<div class="namebox"><label for="nm">اسمك (اختياري)</label><input id="nm" type="text" maxlength="24" autocomplete="off" value="'+esc(getName())+'"></div>'+
+   '<div class="actions">'+
+     '<button class="btn" id="go">ابدئي اللعب</button>'+
+     '<button class="btn ghost" id="pres">وضع المشرفة (برمز)</button>'+
+   '</div>'+
+   (best? '<p class="best">أعلى نتيجة لك على هذا الجهاز: '+ar(best)+' نقطة</p>' : '')+
+   '<p class="foot">جمعية عالم غراس للفتيات</p>'
+  );
+  document.getElementById("go").onclick = function(){
+    var v = document.getElementById("nm").value.trim();
+    setName(v); startGame(v);
+  };
+  document.getElementById("pres").onclick = function(){ showGate(); };
+  document.getElementById("nm").addEventListener("keydown",function(e){ if(e.key==="Enter") document.getElementById("go").click(); });
+}
+
+/* ---------- اللعب الفردي ---------- */
+function shuffle(a){
+  var r=a.slice();
+  for(var i=r.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=r[i]; r[i]=r[j]; r[j]=t; }
+  return r;
+}
+function startGame(name){
+  S = {name:name, i:0, score:0, streak:0, right:0, perm:null, t0:0, done:false, last:null};
+  showQ();
+}
+function showQ(){
+  var q = Q[S.i];
+  S.perm = shuffle([0,1,2,3]);
+  S.done = false;
+  var tiles = "";
+  for(var k=0;k<4;k++){
+    tiles += '<button class="tile" data-k="'+k+'" data-p="'+k+'">'+ICONS[k]+'<span>'+esc(q.o[S.perm[k]])+'</span></button>';
+  }
+  render(
+   '<div class="top">'+
+     '<span class="pill">السؤال '+ar(S.i+1)+' من '+ar(Q.length)+'</span>'+
+     (S.streak>=2 ? '<span class="pill">تتابع '+ar(S.streak)+'</span>' : '')+
+     '<span class="pill score">'+ar(S.score)+' نقطة</span>'+
+   '</div>'+
+   '<div class="beam" role="timer" aria-label="الوقت المتبقي"><i id="bi"></i></div>'+
+   '<span class="chip '+q.t+'">'+chipLabel(q.t)+'</span>'+
+   '<h2 class="qtext" id="qt" tabindex="-1">'+esc(q.q)+'</h2>'+
+   '<div class="tiles">'+tiles+'</div>'+
+   '<p class="keys">يمكنك الاختيار بالأرقام ١ إلى ٤ من لوحة المفاتيح</p>'
+  );
+  var tl = app.querySelectorAll(".tile");
+  for(var x=0;x<tl.length;x++){
+    (function(btn){ btn.onclick=function(){ answer(parseInt(btn.getAttribute("data-p"),10)); }; })(tl[x]);
+  }
+  S.t0 = performance.now();
+  var bi = document.getElementById("bi");
+  timer = setInterval(function(){
+    var el = (performance.now()-S.t0)/1000;
+    var left = Math.max(0, 1 - el/T);
+    bi.style.transform = "scaleX("+left+")";
+    if(left<0.25) bi.className="low";
+    if(el>=T){ answer(-1); }
+  },100);
+}
+function answer(p){
+  if(S.done) return;
+  S.done = true;
+  stopTimer();
+  var q = Q[S.i];
+  var el = Math.min(T,(performance.now()-S.t0)/1000);
+  var correctPos = S.perm.indexOf(q.a);
+  var ok = (p===correctPos);
+  var gained = 0;
+  if(ok){
+    S.streak++; S.right++;
+    gained = Math.round(1000*(1-(el/T)/2));
+    if(S.streak>=2) gained += Math.min(S.streak-1,5)*100;
+    S.score += gained;
+  } else { S.streak = 0; }
+  S.last = {ok:ok, gained:gained, timeout:(p===-1), correctText:q.o[q.a]};
+  showFb();
+}
+function showFb(){
+  var q = Q[S.i], L = S.last;
+  var glyph = L.ok
+    ? '<svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#121214"/><path d="M6.5 12.5l3.7 3.7 7.3-8" stroke="#E5AF2F" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    : '<svg class="glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#592255"/><path d="M8 8l8 8M16 8l-8 8" stroke="#EFE0B6" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>';
+  var head = L.ok
+    ? '<p class="big">أصبتِ!</p><p class="pts">+'+ar(L.gained)+' نقطة</p>'+(S.streak>=2?'<p class="mini">تتابع '+ar(S.streak)+' إجابات صحيحة</p>':'')
+    : '<p class="big">'+(L.timeout?'انتهى الوقت':'ليست هذه')+'</p><p class="mini">الإجابة الصحيحة موضّحة تحت</p>';
+  var last = (S.i===Q.length-1);
+  render(
+   '<div class="top"><span class="pill">السؤال '+ar(S.i+1)+' من '+ar(Q.length)+'</span><span class="pill score">'+ar(S.score)+' نقطة</span></div>'+
+   '<div class="fb '+(L.ok?'ok':'no')+'">'+glyph+head+'</div>'+
+   (L.ok ? '' : '<p class="rightans">الصحيح: '+esc(L.correctText)+'</p>')+
+   '<div class="note"><h3>الهداية</h3><p>'+esc(q.n)+'</p></div>'+
+   '<div class="actions"><button class="btn" id="nx">'+(last?'اعرضي نتيجتي':'السؤال التالي')+'</button></div>'
+  );
+  document.getElementById("nx").focus();
+  document.getElementById("nx").onclick = function(){
+    if(last) showEnd(); else { S.i++; showQ(); }
+  };
+}
+function showEnd(){
+  var best = getBest(), newBest = S.score>best;
+  if(newBest) setBest(S.score);
+  var b = BADGES[BADGES.length-1];
+  for(var i=0;i<BADGES.length;i++){ if(S.right/Q.length>=BADGES[i].min){ b=BADGES[i]; break; } }
+  var who = S.name ? ("يا "+esc(S.name)+"، ") : "";
+  render(
+   '<section class="endhero">'+
+     '<p class="badge">'+b.name+'</p>'+
+     '<p class="score">'+ar(S.score)+'</p>'+
+     '<p>نقطة</p>'+
+   '</section>'+
+   '<div class="stats">'+
+     '<div class="stat"><b>'+ar(S.right)+' من '+ar(Q.length)+'</b>إجابات صحيحة</div>'+
+     '<div class="stat"><b>'+ar(Math.max(newBest?S.score:best,S.score))+'</b>'+(newBest?'رقم قياسي جديد':'أعلى نتيجة لك')+'</div>'+
+   '</div>'+
+   '<p class="intro" style="margin-top:0">'+who+b.msg+'</p>'+
+   '<div class="challenge" style="margin-top:20px"><h3>تحدّي هذا الأسبوع</h3><p>ابدئي رسالة لأمك أو أبيك بعبارة «شكرًا لأنك…» وأكمليها بموقف حقيقي تتذكرينه.</p></div>'+
+   '<div class="actions"><button class="btn" id="again">العبي من جديد</button><button class="btn ghost" id="home">الصفحة الرئيسية</button></div>'+
+   '<p class="foot">البر لا يبدأ من يدي حين أخدمهما، بل من قلبي حين أعظّم أمر ربي.</p>'
+  );
+  document.getElementById("again").onclick = function(){ startGame(S.name); };
+  document.getElementById("home").onclick = showStart;
+}
+
+
+/* ---------- بوابة المشرفة ---------- */
+var SALT = "mushour-ghiras-2026|";
+var HASH = "9ccfd2a8757b7af331ea4ae62ef86067dd27b3f30dd06127d15e909b3da9b553";
+var tries = 0, lockUntil = 0;
+function sha(s){
+  var b = new TextEncoder().encode(s);
+  return crypto.subtle.digest("SHA-256", b).then(function(d){
+    return Array.prototype.map.call(new Uint8Array(d), function(x){ return ("0"+x.toString(16)).slice(-2); }).join("");
+  });
+}
+function showGate(){
+  render(
+   '<section class="hero" style="padding-top:40px">'+
+     '<h1 style="font-size:2.2rem">وضع المشرفة</h1>'+
+     '<span class="sub">للمشرفة والمدرّبة فقط</span>'+
+   '</section>'+
+   '<div class="namebox"><label for="cd">أدخلي الرمز</label><input id="cd" type="password" autocomplete="off" autocapitalize="characters" dir="ltr" style="text-align:center;letter-spacing:.15em"></div>'+
+   '<p class="best" id="msg" role="alert"></p>'+
+   '<div class="actions"><button class="btn" id="ok">دخول</button><button class="btn ghost" id="back">رجوع</button></div>'
+  );
+  var inp = document.getElementById("cd"), msg = document.getElementById("msg");
+  inp.focus();
+  function tryIt(){
+    var now = Date.now();
+    if(now < lockUntil){ msg.textContent = "حاولي بعد قليل."; return; }
+    if(!(window.crypto && crypto.subtle)){ msg.textContent = "تعذّر التحقق من الرمز على هذا المتصفح."; return; }
+    var code = inp.value.replace(/[\s-]/g,"").toUpperCase();
+    sha(SALT + code).then(function(hx){
+      if(hx === HASH){ tries = 0; pStart(); }
+      else {
+        tries++;
+        if(tries >= 5){ lockUntil = Date.now()+60000; tries = 0; msg.textContent = "محاولات كثيرة. انتظري دقيقة ثم أعيدي."; }
+        else msg.textContent = "الرمز غير صحيح.";
+        inp.value = ""; inp.focus();
+      }
+    });
+  }
+  document.getElementById("ok").onclick = tryIt;
+  document.getElementById("back").onclick = showStart;
+  inp.addEventListener("keydown", function(e){ if(e.key==="Enter") tryIt(); });
+}
+
+/* ---------- وضع المشرفة (العرض على الشاشة) ---------- */
+var P = {i:0, shown:false};
+function pStart(){ P = {i:0, shown:false}; pRender(); }
+function pRender(){
+  var q = Q[P.i], tiles = "";
+  for(var k=0;k<4;k++){
+    var cls = "tile";
+    var mark = "";
+    if(P.shown){
+      if(k===q.a){ cls += " right"; mark = '<span class="mark" aria-hidden="true">✓</span>'; }
+      else cls += " dim";
+    }
+    tiles += '<div class="'+cls+'" data-k="'+k+'">'+ICONS[k]+'<span>'+esc(q.o[k])+'</span>'+mark+'</div>';
+  }
+  render(
+   '<div class="top"><span class="pill">'+ar(P.i+1)+' / '+ar(Q.length)+'</span><span class="chip '+q.t+'" style="margin:0">'+chipLabel(q.t)+'</span></div>'+
+   '<h2 class="qtext" tabindex="-1">'+esc(q.q)+'</h2>'+
+   '<div class="tiles">'+tiles+'</div>'+
+   (P.shown ? '<div class="note" style="margin-top:18px"><h3>الهداية</h3><p>'+esc(q.n)+'</p></div>' : '')+
+   '<div class="pbar">'+
+     (P.i>0 ? '<button class="btn ghost" id="pp">السابق</button>' : '')+
+     '<button class="btn" id="pn">'+(P.shown ? (P.i===Q.length-1 ? 'إنهاء العرض' : 'السؤال التالي') : 'اكشفي الإجابة')+'</button>'+
+     '<button class="btn ghost" id="ph">خروج</button>'+
+   '</div>'+
+   '<p class="keys">مسطرة المسافة أو Enter: كشف الإجابة ثم التالي</p>',
+   true
+  );
+  document.getElementById("pn").onclick = pNext;
+  document.getElementById("ph").onclick = showStart;
+  var pp = document.getElementById("pp");
+  if(pp) pp.onclick = function(){ P.i--; P.shown=false; pRender(); };
+}
+function pNext(){
+  if(!P.shown){ P.shown = true; pRender(); return; }
+  if(P.i===Q.length-1){ showStart(); return; }
+  P.i++; P.shown=false; pRender();
+}
+
+/* لوحة المفاتيح */
+document.addEventListener("keydown",function(e){
+  if(e.target && (e.target.tagName==="INPUT")) return;
+  if(app.classList.contains("pres")){
+    if(e.key===" " || e.key==="Enter"){ if(e.target.tagName!=="BUTTON"){ e.preventDefault(); pNext(); } }
+    return;
+  }
+  var tl = app.querySelectorAll(".tile");
+  if(tl.length && !S.done){
+    var n = parseInt(e.key,10);
+    if(n>=1 && n<=4){ answer(n-1); }
+    var ar2 = "١٢٣٤".indexOf(e.key);
+    if(ar2>=0){ answer(ar2); }
+  }
+});
+
+showStart();
+})();
+</script>
+</body>
+</html>
